@@ -119,18 +119,24 @@ VS Code なら `Exercise.lean` を開き、`sorry` を消して 1 行ずつ埋�
 |---|---|---|
 | 0–5 | 対応表の共有 | 背骨を揃える |
 | 5–10 | 環境確認（`lake build`） | 詰まりを早期発見 |
-| 10–30 | Exercise 01–02 | 盤面が変わる体験、逆向き探索 |
-| 30–45 | Exercise 03 | 分岐と記法 |
-| 45–60 | Exercise 04 | 自動化のブラックボックス化を議論 |
-| 60–80 | Exercise 05 | 総合演習 |
-| 80–90 | まとめ＋背景の話 | 検証層へ接続 |
+| 10–20 | [00_prime](Exercises/00_prime) | 手順を書くと機械が検証する、を体感 |
+| 20–30 | [01_prime_range](Exercises/01_prime_range) | 範囲を機械に書かせる。範囲ミスが静かに壊れる |
+| 30–45 | [02_first_tactic](Exercises/02_first_tactic) | ゴールを見て手を選ぶ |
+| 45–55 | [03_backward_search](Exercises/03_backward_search) | 逆向き探索 |
+| 55–65 | [04_case_split](Exercises/04_case_split) | 分岐と記法 |
+| 65–75 | [05_automation](Exercises/05_automation) | 自動化のブラックボックス化を議論 |
+| 75–85 | [06_synthesis](Exercises/06_synthesis) | 総合演習 |
+| 85–90 | まとめ＋背景の話 | 検証層へ接続 |
+
+**時間が足りない場合**: `03_backward_search` と `04_case_split` を読み専用にし、`02` → `05` → `06` に絞る。素数（`00`・`01`）は落とさない。ここが「機械が検証する」の入口なので、飛ばすと後が伝わらない。
 
 ### つまずきポイント（実際に詰まる順）
 
-1. **`exact` と `apply` の区別** — `exact` はゴールを丸ごと埋める。`apply` はゴールを別のゴールに変換する
-2. **`intro` 忘れ** — ゴールが `P → Q` のとき、まず `intro hp` で仮定を盤面に置く
-3. **`∧` と `→` の混同** — 形が違えば使える手も違う
-4. **`sorry` で通ってしまう** — `sorry` は警告 1 行だけでコンパイルが通る。証明ではない。次の手順で検出する:
+1. **`List.range` の範囲ミス** — `List.range (n-2)` と `(n-1)` の違い。間違えても**エラーにならず、間違った答えが返る**。`00` と `01` で必ず突き合わせる
+2. **`exact` と `apply` の区別** — `exact` はゴールを丸ごと埋める。`apply` はゴールを別のゴールに変換する
+3. **`intro` 忘れ** — ゴールが `P → Q` のとき、まず `intro hp` で仮定を盤面に置く
+4. **`∧` と `→` の混同** — 形が違えば使える手も違う
+5. **`sorry` で通ってしまう** — `sorry` は警告 1 行だけでコンパイルが通る。証明ではない。次の手順で検出する:
 
    ```lean
    theorem my_thm (P : Prop) : P := by sorry
@@ -140,7 +146,7 @@ VS Code なら `Exercise.lean` を開き、`sorry` を消して 1 行ずつ埋�
 
    `example` は名前が無いので `#print axioms` で覗けない。**名前付きで書く**こと。
 
-5. **Infoview が出ない** — VS Code が `lakefile.toml` のあるディレクトリを開いているか確認
+6. **Infoview が出ない** — VS Code が `lakefile.toml` のあるディレクトリを開いているか確認
 
 ## 記法の最小辞典
 
