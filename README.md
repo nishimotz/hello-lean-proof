@@ -178,6 +178,8 @@ VS Code なら `Exercise.lean` を開き、`sorry` を消して 1 行ずつ埋�
 Lauren Tan（`poteto`）の講演は、その答えを **「検証の証拠物を人間がレビューする形に仕事を変える」** に置いた。
 Lean と TLA+ は、その証拠物を作る道具の一つとして実際に使われている。
 
+この系譜（手計算 → Mathematica / SymPy → NumPy・SciPy → STUMPY → Lean / TLA+）と「各段が何を保証しないか」は [docs/lineage.md](docs/lineage.md) にまとめた。
+
 この教材の探索ゲームは、その道具の入口にすぎない。
 だが **「盤面を見て手を選ぶ」** という感覚は、コードベースを見て制約を選ぶ感覚と同じ形をしている。
 
