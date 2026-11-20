@@ -172,11 +172,12 @@ VS Code なら `Exercise.lean` を開き、`sorry` を消して 1 行ずつ埋�
 
 | 項目 | 状態 |
 |---|---|
-| 全 `Solution.lean`（5 ファイル）のコンパイル | Lean 4.36.0 で通過、rc=0、警告 0 |
+| 全 `Solution.lean`（7 ファイル）のコンパイル | Lean 4.36.0 で通過、rc=0、警告 0 |
 | 全 `Exercise.lean` のコンパイル | `sorry` 警告のみ（想定どおり）、エラー 0 |
-| `lake build` | `Build completed successfully (22 jobs)`（✔5 / ⚠5=Exercise の sorry / エラー 0） |
-| 04 章の「失敗する手」が実際に落ちること | 実測で確認（`omega could not prove the goal` / `simp made no progress`。**4.36.0 時点の文言**） |
-| 05 章の自動化表（どの問題が `simp`/`omega` で解けるか） | 独立検証で再確認（5-1 `simp` ✓、5-2 `simp [h]` ✓、5-3 `simp [h]` ✗） |
+| `lake build` | `Build completed successfully (30 jobs)`（エラー 0） |
+| `00_prime` の判定が正しい範囲 | 0〜168。最初の破綻は 169 = 13²（実測。0〜300 の不一致は [169,221,247,289,299] の合成数のみ） |
+| `05_automation` の「失敗する手」が実際に落ちること | 実測で確認（`omega could not prove the goal` / `simp made no progress`。**4.36.0 時点の文言**） |
+| `06_synthesis` の自動化表（どの問題が `simp`/`omega` で解けるか） | 独立検証で再確認（5-1 `simp` ✓、5-2 `simp [h]` ✓、5-3 `simp [h]` ✗） |
 | `sorryAx` 検出手順 | 実出力で再現 |
 | VS Code Infoview の画面文言 | 公式仕様ベース。実機目視は未実施 |
 

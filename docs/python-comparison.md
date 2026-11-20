@@ -142,7 +142,7 @@ Python の関数は呼ぶと仕事をする。Lean の証明は**型検査を通
 
 ## 6. 次の一歩
 
-`README.md` のクイックスタートで環境を作り、`Exercises/01_first_tactic` から始める。
+`README.md` のクイックスタートで環境を作り、`Exercises/02_first_tactic` から始める。
 
 最初の 3 分で分かること:
 - `constructor` を打つと Infoview のゴールが 2 つに割れる
