@@ -27,7 +27,9 @@ Python のテストなら `assert fizzbuzz(15) == "FizzBuzz"` のように具体
 Lean では、特定の 1 個ではなく **「15 で割り切れるどんな自然数 `n` でも、必ず `"FizzBuzz"` になる」** という盤面をセットする。
 
 ```lean
-theorem fizzbuzz_15 (n : Nat) (h : n % 15 = 0) : fizzbuzz n = "FizzBuzz" := by
+theorem fizzbuzz_15
+    (n : Nat) (h : n % 15 = 0) :
+    fizzbuzz n = "FizzBuzz" := by
   simp [fizzbuzz, h]
 ```
 
@@ -41,6 +43,8 @@ theorem fizzbuzz_15 (n : Nat) (h : n % 15 = 0) : fizzbuzz n = "FizzBuzz" := by
      （`h` を `if` に直接当てるのではなく、**書き換え → 計算**の順に進む）
    - ゴールが消えて **`No goals`（勝利）** になる
 
+> **インデントの補足**: `theorem` や `def` のヘッダが長いときは途中で改行してよい。折り返した行は必ずインデントする（0 列目に戻すと別の定義とみなされてエラーになる）。`by` ブロック内の tactic は同じ列（2 スペース）に揃え、ヘッダの折り返しは区別しやすいよう 4 スペースにするのが定番。
+
 ---
 
 ## 3. 持ち駒が足りないときは `omega` で作る
@@ -48,7 +52,9 @@ theorem fizzbuzz_15 (n : Nat) (h : n % 15 = 0) : fizzbuzz n = "FizzBuzz" := by
 では「5 の倍数かつ 15 の倍数でないときは `"Buzz"` になる」はどうだろうか。
 
 ```lean
-theorem fizzbuzz_5 (n : Nat) (h5 : n % 5 = 0) (h15 : n % 15 ≠ 0) : fizzbuzz n = "Buzz" := by
+theorem fizzbuzz_5
+    (n : Nat) (h5 : n % 5 = 0) (h15 : n % 15 ≠ 0) :
+    fizzbuzz n = "Buzz" := by
   have h3 : n % 3 ≠ 0 := by omega
   simp [fizzbuzz, h3, h5, h15]
 ```
@@ -65,7 +71,9 @@ theorem fizzbuzz_5 (n : Nat) (h5 : n % 5 = 0) (h15 : n % 15 ≠ 0) : fizzbuzz n 
 もし `n % 15 = 0` から `n % 3 = 0` を出したい場合は、剰余の入れ子に書き換えると通る（4.36.0 で実測）。
 
 ```lean
-theorem m3_of_m15 (n : Nat) (h : n % 15 = 0) : n % 3 = 0 := by
+theorem m3_of_m15
+    (n : Nat) (h : n % 15 = 0) :
+    n % 3 = 0 := by
   have h' : n % 3 = n % 15 % 3 := by omega
   omega
 ```
@@ -86,7 +94,9 @@ def buggy_fizzbuzz (n : Nat) : String :=
   else if n % 5 == 0 then "Buzz"
   else toString n
 
-theorem buggy_15 (n : Nat) (h : n % 15 = 0) : buggy_fizzbuzz n = "FizzBuzz" := by
+theorem buggy_15
+    (n : Nat) (h : n % 15 = 0) :
+    buggy_fizzbuzz n = "FizzBuzz" := by
   have h3 : n % 3 = 0 := by omega
   simp [buggy_fizzbuzz, h3]
 ```
