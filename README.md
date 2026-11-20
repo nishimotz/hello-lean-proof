@@ -27,7 +27,7 @@ Lean 4 で **証明を「探索ゲーム」として** 学ぶ日本語ハンズ�
 - Lean 4.36.0（`lean-toolchain` で固定済み）
 - 初回は 1〜2 GB のダウンロードが発生する
 
-**Windows**: [docs/windows.md](docs/windows.md) を見る（`elan-init.ps1` を使う手順。実機検証は未了）
+**Windows**: [docs/windows.md](docs/windows.md) を見る（`elan-init.ps1` を使う手順。Windows x64 で実機検証済み）
 
 **Python 経験者**: 先に [docs/python-comparison.md](docs/python-comparison.md) を読むと入りやすい（10 分）。「`sorry` は `pass`」の 1 行だけで見通しが変わる。
 

@@ -3,9 +3,8 @@
 このページは Windows の **PowerShell** から始める人向け。
 WSL の中なら macOS / Linux と同じ手順がそのまま使えるので、[README](../README.md) のクイックスタートを見てほしい。
 
-> **注意**: このページの手順は **実機の Windows で `lake build` を通した検証をしていない**。
-> elan の PowerShell インストーラの存在とオプション、配布アーキテクチャまでは一次情報で確認した。
-> 詰まった箇所は Issue で知らせてほしい。
+> **検証状況**: Windows x64（PowerShell 7.6.10）で `elan-init.ps1` の実行と `lake build`（22 jobs）の成功を確認済み。
+> Windows ARM 実機および VS Code 拡張の挙動は未確認。詰まった箇所は Issue で知らせてほしい。
 
 ---
 
@@ -15,12 +14,13 @@ PowerShell を開いて、2 行。
 
 ```powershell
 Invoke-WebRequest -Uri https://raw.githubusercontent.com/leanprover/elan/master/elan-init.ps1 -OutFile elan-init.ps1
-./elan-init.ps1 -NoPrompt -DefaultToolchain leanprover/lean4:v4.36.0
+./elan-init.ps1 -NoPrompt $true -DefaultToolchain leanprover/lean4:v4.36.0
 ```
 
-- `-NoPrompt` は対話メニューを出さない指定
+- `-NoPrompt $true` は対話メニューを出さない指定（`elan-init.ps1` 側で `[bool]` 型として定義されているため `$true` または `1` が必要）
 - `-DefaultToolchain` を省くと最新の stable が入る。**このリポジトリは `lean-toolchain` で 4.36.0 に固定している**ので、合わせておくと最初から噛み合う
-- PATH は自動で通る（`-NoModifyPath` を付けない限り）。`%USERPROFILE%\.elan\bin` が追加される
+- PATH は自動でユーザー環境変数に通る（`-NoModifyPath $true` を付けない限り）。`%USERPROFILE%\.elan\bin` が追加される
+  - **注意**: 実行中の PowerShell ウィンドウには即座に反映されないため、次の「確認」の前に **PowerShell を開き直す**こと
 
 ### 実行ポリシーで止まったら
 
@@ -97,10 +97,17 @@ export PATH="$HOME/.elan/bin:$PATH"
 
 ---
 
-## 6. 未確認事項
+## 6. 検証状況・未確認事項
 
-- 実機 Windows（x64 / ARM）での `lake build` 成功は未検証
-- `elan-init.ps1` の `-DefaultToolchain` に `leanprover/lean4:v4.36.0` を渡す書式は一次情報の `param` 定義から読んだもので、実機実行は未検証
-- VS Code 拡張の Windows 固有の挙動は未確認
+### 確認済み（Windows x64 / PowerShell 7.6.10）
+
+- `./elan-init.ps1 -NoPrompt $true -DefaultToolchain leanprover/lean4:v4.36.0` による `elan` 導入（`elan 4.4.0`）
+- `Lean (version 4.36.0, x86_64-w64-windows-gnu)` の自動取得と `lake build`（22 jobs、エラー 0）
+- `lake env lean Exercises/01_first_tactic/Solution.lean`（`/` 区切り、rc=0）
+
+### 未確認事項
+
+- 実機 Windows ARM での動作（x64 エミュレーション）
+- VS Code 拡張（`leanprover.lean4`）の Windows 固有の挙動
 
 確認できた人からの報告を歓迎する。
