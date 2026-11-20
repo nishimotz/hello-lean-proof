@@ -99,7 +99,7 @@ export PATH="$HOME/.elan/bin:$PATH"
 
 ## 6. 検証状況・未確認事項
 
-### 確認済み（Windows x64 / PowerShell 7.6.10）
+### 確認済み（Windows x64 / PowerShell 7.6.10、2026-11・実機報告ベース）
 
 - `./elan-init.ps1 -NoPrompt $true -DefaultToolchain leanprover/lean4:v4.36.0` による `elan` 導入（`elan 4.4.0`）
 - `Lean (version 4.36.0, x86_64-w64-windows-gnu)` の自動取得と `lake build`（22 jobs、エラー 0）
@@ -109,5 +109,7 @@ export PATH="$HOME/.elan/bin:$PATH"
 
 - 実機 Windows ARM での動作（x64 エミュレーション）
 - VS Code 拡張（`leanprover.lean4`）の Windows 固有の挙動
+- PowerShell 5.1（Windows 標準）での動作（確認は PowerShell 7.6.10 のみ）
+- `elan-init.ps1` の `[bool]` パラメータは `-NoPrompt $true` の形で渡す。`param` 定義との整合は一次情報で確認済みだが、PS 5.1 での挙動は未検証
 
 確認できた人からの報告を歓迎する。

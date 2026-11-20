@@ -19,7 +19,8 @@ Lean 4 で **証明を「探索ゲーム」として** 学ぶ日本語ハンズ�
 | 自動探索 | `simp` / `omega` / `aesop` |
 
 * **暗算がいらない**: 30 手先まで頭の中で考えるのではなく、目の前の盤面を見て次の 1 手を選ぶだけ
-* **誤魔化しが効かない快感**: 型検査器という最強の審判がいるため、`No goals` が出た瞬間のクリアは本物
+* **誤魔化しが効かない快感**: 型検査器が判定を下すので、`No goals` が出た瞬間のクリアは本物
+  - ただし `sorry` を置いた場合も `No goals` は出る。本物かどうかは `#print axioms` で `sorryAx` が出ないことを確認する（README の「つまずきポイント」参照）
 * **手動から戦略へ**: 最初は手で 1 手ずつ崩し、慣れたら `simp` / `omega` のような自動探索をどう使うかの戦略に移る
 
 この対応を体に入れると、Lean の文法を暗記しなくても証明が読めるようになる。
@@ -31,7 +32,7 @@ Lean 4 で **証明を「探索ゲーム」として** 学ぶ日本語ハンズ�
 - Lean 4.36.0（`lean-toolchain` で固定済み）
 - 初回は 1〜2 GB のダウンロードが発生する
 
-**Windows**: [docs/windows.md](docs/windows.md) を見る（`elan-init.ps1` を使う手順。Windows x64 で実機検証済み）
+**Windows**: [docs/windows.md](docs/windows.md) を見る（`elan-init.ps1` を使う手順。Windows x64 / PowerShell 7 で動作報告あり。2026-11 時点）
 
 **Python 経験者**: 先に [docs/python-comparison.md](docs/python-comparison.md) を読むと入りやすい（10 分）。「`sorry` は `pass`」の 1 行だけで見通しが変わる。
 
@@ -61,7 +62,7 @@ lake build
 ```
 
 `Build completed successfully` が出れば環境は完成。
-（本リポジトリは Lean 4.36.0 で `lake build` 11 ジョブ成功を確認済み）
+（`Build completed successfully (22 jobs)` が出れば環境は完成。内訳は下の「検証状況」表を参照）
 
 ### 3. エディタ
 
