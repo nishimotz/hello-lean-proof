@@ -38,6 +38,8 @@ Lean 4 で **証明を「探索ゲーム」として** 学ぶ日本語ハンズ�
 
 **読み物（題材例）**: [docs/fizzbuzz.md](docs/fizzbuzz.md) では、FizzBuzz を例に「テスト」と「証明ゲーム」の違いを解説している。
 
+**読み物（概念）**: [docs/type-safety-vs-proof.md](docs/type-safety-vs-proof.md) では、「型安全」と「証明」が別の話であることを、中2の合同証明を例に分けて説明している。
+
 ## クイックスタート
 
 ### 1. elan（Lean のバージョン管理）を入れる
