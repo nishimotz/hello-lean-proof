@@ -1,0 +1,7 @@
+name = "hello_lean_proof"
+version = "0.1.0"
+defaultTargets = ["HelloLeanProof"]
+
+[[lean_lib]]
+name = "HelloLeanProof"
+globs = ["Exercises.+"]
