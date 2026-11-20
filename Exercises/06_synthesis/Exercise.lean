@@ -1,6 +1,6 @@
--- 05: 総合演習 — 手で解いてから自動化に置き換える
+-- 06: 総合演習 — 手で解いてから自動化に置き換える
 --
--- 使い方: lake env lean Exercises/05_synthesis/Solution.lean
+-- 使い方: lake env lean Exercises/06_synthesis/Solution.lean
 --
 -- 進め方:
 --   1. Exercise.lean を開き、まず手で解く（constructor / exact / apply / intro / obtain / rcases）

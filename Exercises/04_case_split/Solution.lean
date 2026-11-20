@@ -1,6 +1,6 @@
--- 03: 場合分け — 盤面が分岐する
+-- 04: 場合分け — 盤面が分岐する
 --
--- 使い方: lake env lean Exercises/03_case_split/Solution.lean
+-- 使い方: lake env lean Exercises/04_case_split/Solution.lean
 -- または VS Code で Infoview を見ながら Exercise.lean を埋める
 
 /-! ## 記法の最小辞典（この章で使うもの）
@@ -12,6 +12,8 @@
 | `⟨a, b⟩` | ペアを作る | `⟨hp, hq⟩` で `P ∧ Q` を 1 手で埋める |
 | `Or.inl h` | 左を選ぶ | `h : P` から `P ∨ Q` を作る |
 | `Or.inr h` | 右を選ぶ | `h : Q` から `P ∨ Q` を作る |
+
+**覚えなくても `constructor` と `exact` だけで全問解ける。** 上の記法は短縮形。
 -/
 
 /-! ## 例題: rcases で分岐する
@@ -28,7 +30,12 @@ example (P Q : Prop) (h : P ∨ Q) : Q ∨ P := by
 -/
 
 example (P Q : Prop) (h : P ∧ Q) : P := by
-  sorry
+  obtain ⟨hp, _hq⟩ := h
+  exact hp
+
+-- 別解: obtain を使わずに取る（h.left でもよい）
+example (P Q : Prop) (h : P ∧ Q) : P := by
+  exact h.left
 
 /-! ## 演習 3-2: 分解してから組み直す
 
@@ -37,7 +44,10 @@ example (P Q : Prop) (h : P ∧ Q) : P := by
 -/
 
 example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by
-  sorry
+  obtain ⟨hp, hq⟩ := h
+  constructor
+  · exact hq
+  · exact hp
 
 /-! ## 演習 3-3: 1 手でペアを作る
 
@@ -45,7 +55,7 @@ example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by
 -/
 
 example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by
-  sorry
+  exact ⟨h.right, h.left⟩
 
 /-! ## 演習 3-4: 分配法則
 
@@ -54,7 +64,10 @@ example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by
 -/
 
 example (P Q R : Prop) (h : P ∧ (Q ∨ R)) : (P ∧ Q) ∨ (P ∧ R) := by
-  sorry
+  obtain ⟨hp, hqr⟩ := h
+  rcases hqr with hq | hr
+  · exact Or.inl ⟨hp, hq⟩
+  · exact Or.inr ⟨hp, hr⟩
 
 /-! ## 観察メモ
 

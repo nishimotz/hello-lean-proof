@@ -1,6 +1,6 @@
--- 04: 自動化に任せる — simp と omega
+-- 05: 自動化に任せる — simp と omega
 --
--- 使い方: lake env lean Exercises/04_automation/Solution.lean
+-- 使い方: lake env lean Exercises/05_automation/Solution.lean
 --
 -- この章の目的は「自動 tactic は便利だが、通った理由を説明できない」を体感すること。
 -- 失敗する手もわざと載せてある。エラーは盤面を変えない（違反手）。

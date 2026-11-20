@@ -80,24 +80,26 @@ hq : Q
 
 ## 構成
 
-| Exercise | 内容 | 形式 |
+| 演習 | 内容 | ファイル |
 |---|---|---|
-| `Exercises/01_first_tactic` | `constructor` で盤面が割れるのを見る | 実行 |
-| `Exercises/02_backward_search` | `apply` でゴールが遡る（逆向き探索） | 実行 |
-| `Exercises/03_case_split` | `rcases` で場合分け。`obtain` / `⟨…⟩` も | 実行 |
-| `Exercises/04_automation` | `simp` / `omega`。失敗する手も見る | 実行 |
-| `Exercises/05_synthesis` | 総合演習（ド・モルガン、分配法則、対偶） | 実行 |
+| [00_prime](Exercises/00_prime) | 素数判定の手順を書く。`decide` で機械に確かめさせる | [Exercise](Exercises/00_prime/Exercise.lean) / [Solution](Exercises/00_prime/Solution.lean) |
+| [01_prime_range](Exercises/01_prime_range) | 割る数を機械に並べさせる（`List.range`）。範囲ミスの危険 | [Exercise](Exercises/01_prime_range/Exercise.lean) / [Solution](Exercises/01_prime_range/Solution.lean) |
+| [02_first_tactic](Exercises/02_first_tactic) | `constructor` で盤面が割れるのを見る | [Exercise](Exercises/02_first_tactic/Exercise.lean) / [Solution](Exercises/02_first_tactic/Solution.lean) |
+| [03_backward_search](Exercises/03_backward_search) | `apply` でゴールが遡る（逆向き探索） | [Exercise](Exercises/03_backward_search/Exercise.lean) / [Solution](Exercises/03_backward_search/Solution.lean) |
+| [04_case_split](Exercises/04_case_split) | `rcases` で場合分け。`obtain` / `⟨…⟩` も | [Exercise](Exercises/04_case_split/Exercise.lean) / [Solution](Exercises/04_case_split/Solution.lean) |
+| [05_automation](Exercises/05_automation) | `simp` / `omega`。失敗する手も見る | [Exercise](Exercises/05_automation/Exercise.lean) / [Solution](Exercises/05_automation/Solution.lean) |
+| [06_synthesis](Exercises/06_synthesis) | 総合演習（ド・モルガン、分配法則、対偶） | [Exercise](Exercises/06_synthesis/Exercise.lean) / [Solution](Exercises/06_synthesis/Solution.lean) |
 
-各ディレクトリに `Exercise.lean`（穴埋め）と `Solution.lean`（解答）がある。
+各ディレクトリに `Exercise.lean`（穴埋め）と `Solution.lean`（解答）がある。リンクから GitHub 上で直接開ける。
 
 ### 演習の進め方
 
 ```bash
 # 穴埋めを解く（sorry があるので警告は出る）
-lake env lean Exercises/01_first_tactic/Exercise.lean
+lake env lean Exercises/02_first_tactic/Exercise.lean
 
 # 自分の解答が正しいか確かめる
-lake env lean Exercises/01_first_tactic/Solution.lean
+lake env lean Exercises/02_first_tactic/Solution.lean
 ```
 
 VS Code なら `Exercise.lean` を開き、`sorry` を消して 1 行ずつ埋める。

@@ -1,6 +1,6 @@
--- 02: 逆向き探索 — apply でゴールが遡る
+-- 03: 逆向き探索 — apply でゴールが遡る
 --
--- 使い方: lake env lean Exercises/02_backward_search/Solution.lean
+-- 使い方: lake env lean Exercises/03_backward_search/Solution.lean
 -- または VS Code で Infoview を見ながら Exercise.lean を埋める
 
 /-! ## 例題: apply でゴールが手前に戻る
