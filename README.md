@@ -38,6 +38,8 @@ Lean 4 で **証明を「探索ゲーム」として** 学ぶ日本語ハンズ�
 
 **読み物（題材例）**: [docs/fizzbuzz.md](docs/fizzbuzz.md) では、FizzBuzz を例に「テスト」と「証明ゲーム」の違いを解説している。
 
+**第 2 部（業務のバグ）**: [docs/formal-rules.md](docs/formal-rules.md) では、チケット販売の売り越しを題材に「テストケースではなくルール（不変条件）を書く」を扱う。AI がコードもテストも書くと自作自演の満点になる問題から始め、同じ題材の Quint / TLA+ 版（[hello-quint](https://github.com/nishimotz/hello-quint)）と並べて、Lean では不変条件を**帰納的な形に強化する**必要があることを示す。演習は [07_state_invariant](Exercises/07_state_invariant)。
+
 **読み物（概念）**: [docs/type-safety-vs-proof.md](docs/type-safety-vs-proof.md) では、「型安全」と「証明」が別の話であることを、中2の合同証明を例に分けて説明している。
 
 ## クイックスタート
@@ -64,7 +66,7 @@ lake build
 ```
 
 `Build completed successfully` が出れば環境は完成。
-（`Build completed successfully (22 jobs)` が出れば環境は完成。内訳は下の「検証状況」表を参照）
+（`Build completed successfully (34 jobs)` が出れば環境は完成。内訳は下の「検証状況」表を参照）
 
 ### 3. エディタ
 
@@ -89,6 +91,7 @@ hq : Q
 | [04_case_split](Exercises/04_case_split) | `rcases` で場合分け。`obtain` / `⟨…⟩` も | [Exercise](Exercises/04_case_split/Exercise.lean) / [Solution](Exercises/04_case_split/Solution.lean) |
 | [05_automation](Exercises/05_automation) | `simp` / `omega`。失敗する手も見る | [Exercise](Exercises/05_automation/Exercise.lean) / [Solution](Exercises/05_automation/Solution.lean) |
 | [06_synthesis](Exercises/06_synthesis) | 総合演習（ド・モルガン、分配法則、対偶） | [Exercise](Exercises/06_synthesis/Exercise.lean) / [Solution](Exercises/06_synthesis/Solution.lean) |
+| [07_state_invariant](Exercises/07_state_invariant) | 状態機械の不変条件。「売り越し」をルールで捕まえる | [Exercise](Exercises/07_state_invariant/Exercise.lean) / [Solution](Exercises/07_state_invariant/Solution.lean) |
 
 各ディレクトリに `Exercise.lean`（穴埋め）と `Solution.lean`（解答）がある。リンクから GitHub 上で直接開ける。
 
@@ -172,9 +175,10 @@ VS Code なら `Exercise.lean` を開き、`sorry` を消して 1 行ずつ埋�
 
 | 項目 | 状態 |
 |---|---|
-| 全 `Solution.lean`（7 ファイル）のコンパイル | Lean 4.36.0 で通過、rc=0、警告 0 |
+| 全 `Solution.lean`（8 ファイル）のコンパイル | Lean 4.36.0 で通過、rc=0、警告 0 |
 | 全 `Exercise.lean` のコンパイル | `sorry` 警告のみ（想定どおり）、エラー 0 |
-| `lake build` | `Build completed successfully (30 jobs)`（エラー 0） |
+| `lake build` | `Build completed successfully (34 jobs)`（エラー 0） |
+| `07_state_invariant` の `Exercise.lean` | `sorry` 警告 10 件のみ（想定どおり）、エラー 0 |
 | `00_prime` の判定が正しい範囲 | 0〜168。最初の破綻は 169 = 13²（実測。0〜300 の不一致は [169,221,247,289,299] の合成数のみ） |
 | `05_automation` の「失敗する手」が実際に落ちること | 実測で確認（`omega could not prove the goal` / `simp made no progress`。**4.36.0 時点の文言**） |
 | `06_synthesis` の自動化表（どの問題が `simp`/`omega` で解けるか） | 独立検証で再確認（5-1 `simp` ✓、5-2 `simp [h]` ✓、5-3 `simp [h]` ✗） |
