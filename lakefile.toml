@@ -5,3 +5,7 @@ defaultTargets = ["HelloLeanProof"]
 [[lean_lib]]
 name = "HelloLeanProof"
 globs = ["Exercises.+"]
+
+[[lean_exe]]
+name = "billing_oracle"
+root = "Exercises.\u00ab08_executable_spec\u00bb.OracleMain"
