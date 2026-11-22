@@ -16,7 +16,14 @@ open Bill
 
 private def numToInt? (n : JsonNumber) : Except String Int :=
   if n.exponent = 0 then .ok n.mantissa
-  else .error s!"expected integer, got mantissa={n.mantissa} exponent={n.exponent}"
+  else .error s!"expected an integer, got a decimal ({n.mantissa}e{n.exponent})"
+
+/-- 元の JSON 値を添えて読める形のエラーにする。 -/
+private def toIntField (v : Json) (name : String) : Except String Int :=
+  match v with
+  -- 数値は `compress` が小数点以下を落とす（3.0 → 3）ので、値は添えない。
+  | .num n => numToInt? n |>.mapError (fun e => s!"{name}: {e}")
+  | _ => .error s!"{name}: expected a number (got {v.compress})"
 
 private def getNat? (j : Json) (k : String) : Except String Nat := do
   let v ← j.getObjVal? k |>.mapError (fun e => s!"{k}: {e}")
@@ -59,13 +66,10 @@ private def linesOf (j : Json) : Except String (List Line) := do
       | v => .error s!"line: not an array ({v.compress})"
     match items with
     | [u, q] =>
-      let unit ← match u with
-        | .num n => numToInt? n
-        | v => .error s!"unit: not a number ({v.compress})"
-      let qty ← match q with
-        | .num n => pure (← numToInt? n).toNat
-        | v => .error s!"qty: not a number ({v.compress})"
-      pure (⟨unit, qty⟩ : Line)
+      let unit ← toIntField u "unit"
+      let qty ← toIntField q "qty"
+      if qty < 0 then .error s!"qty: must be >= 0 (got {q.compress})"
+      else pure (⟨unit, qty.toNat⟩ : Line)
     | _ => .error "line: expected [unit, qty]"
 
 private def asStr : Json → Except String String
@@ -78,9 +82,7 @@ private partial def exprOf : Json → Except String Bill.Expr
     let items := a.toList
     match items with
     | ["one", amt, cur] =>
-      let n ← match amt with
-        | .num n => numToInt? n
-        | v => .error s!"amount: not a number ({v.compress})"
+      let n ← toIntField amt "amount"
       let c ← currOf (← asStr cur)
       return Bill.Expr.one ⟨n, c⟩
     | ["add", x, y] => return Bill.Expr.add (← exprOf x) (← exprOf y)

@@ -2,8 +2,12 @@
 
     uv run python tools/mutation_check.py
 
-各変異について billing/service.py を書き換え、pytest を走らせ、
+各変異について実装を書き換え、pytest を走らせ、
 「落ちた＝検出できた」を数える。検出できない変異はテストの穴。
+
+実装ファイルは直接書き換えない。作業コピー `billing/_mutant.py` を作り、
+`PYTHONPATH` を差し替えてそちらを import させる。Ctrl-C や並走でも
+手元の `service.py` は壊れない。
 """
 
 import subprocess
@@ -12,6 +16,7 @@ import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TARGET = ROOT / "billing" / "service.py"
+MUTANT = ROOT / "billing" / "_mutant_service.py"
 
 MUTATIONS = [
     ("合計割引 → 明細割引", "return s - s * pct // 100",
@@ -22,6 +27,28 @@ MUTATIONS = [
 ]
 
 
+CONFTEST = ROOT / "tests" / "_mutant_conftest.py"
+
+
+def _write_mutant(source: str) -> None:
+    """変異版の service を `billing` パッケージ内に置き、差し替え用 conftest を作る。"""
+    MUTANT.write_text(source)
+    # tests より先に import される場所で billing.service を差し替える
+    CONFTEST.write_text(
+        "import billing, billing._mutant_service as m\n"
+        "billing.service = m\n"
+        "billing.total = m.total\n"
+        "billing.with_tax = m.with_tax\n"
+        "billing.per_line_total = m.per_line_total\n"
+    )
+
+
+def _cleanup() -> None:
+    for p in (MUTANT, CONFTEST):
+        if p.exists():
+            p.unlink()
+
+
 def run() -> int:
     original = TARGET.read_text()
     undetected = []
@@ -30,17 +57,19 @@ def run() -> int:
             if old not in original:
                 print(f"skip: {name}（置換対象が見つからない）")
                 continue
-            TARGET.write_text(original.replace(old, new, 1))
+            _write_mutant(original.replace(old, new, 1))
             proc = subprocess.run(
-                ["uv", "run", "pytest", "tests/test_differential.py", "-q"],
+                ["uv", "run", "pytest", "tests/test_differential.py", "-q",
+                 "-p", "_mutant_conftest"],
                 cwd=ROOT, capture_output=True, text=True,
+                env={**__import__("os").environ, "PYTHONPATH": str(ROOT / "tests")},
             )
             detected = proc.returncode != 0
             print(f"{'検出' if detected else '見逃し'}: {name}")
             if not detected:
                 undetected.append(name)
     finally:
-        TARGET.write_text(original)
+        _cleanup()
     print(f"\n{len(MUTATIONS) - len(undetected)}/{len(MUTATIONS)} 検出")
     return 0 if not undetected else 1
 

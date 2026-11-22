@@ -68,7 +68,7 @@ lake build
 ```
 
 `Build completed successfully` が出れば環境は完成。
-（`Build completed successfully (40 jobs)` が出れば環境は完成。内訳は下の「検証状況」表を参照）
+（`Build completed successfully` が出れば環境は完成。手元では `(40 jobs)`。内訳は下の「検証状況」表を参照）
 
 ### 3. エディタ
 
@@ -180,11 +180,12 @@ VS Code なら `Exercise.lean` を開き、`sorry` を消して 1 行ずつ埋�
 |---|---|
 | 全 `Solution.lean`（9 ファイル）のコンパイル | Lean 4.36.0 で通過、rc=0、警告 0 |
 | 全 `Exercise.lean` のコンパイル | `sorry` 警告のみ（想定どおり）、エラー 0 |
-| `lake build` | `Build completed successfully (40 jobs)`（エラー 0） |
+| `lake build` | `Build completed successfully (40 jobs)`（エラー 0。ジョブ数は並列度で変わる） |
 | `07_state_invariant` の `Exercise.lean` | `sorry` 警告 10 件のみ（想定どおり）、エラー 0 |
 | `08_executable_spec` の `Exercise.lean` | `sorry` 警告 7 件のみ（想定どおり）、エラー 0 |
 | `08_executable_spec` の Oracle | `lake build billing_oracle` 通過。JSON Lines で応答、未登録レートは `no_rate` |
 | `08_executable_spec` の差分テスト | クリーンクローンで `uv run pytest` → 8 passed（Hypothesis 500 例 ×2 + 単体 4） |
+| `08_executable_spec` のカバレッジ | `--cov=billing --cov-branch` で 100%（Stmts 17 / Branch 2、Missing 0） |
 | `08_executable_spec` の Mutation Test | `tools/mutation_check.py` で 4/4 検出 |
 | `00_prime` の判定が正しい範囲 | 0〜168。最初の破綻は 169 = 13²（実測。0〜300 の不一致は [169,221,247,289,299] の合成数のみ） |
 | `05_automation` の「失敗する手」が実際に落ちること | 実測で確認（`omega could not prove the goal` / `simp made no progress`。**4.36.0 時点の文言**） |

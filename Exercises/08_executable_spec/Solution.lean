@@ -56,6 +56,8 @@ inductive Rank where
   | normal | silver | gold
   deriving Repr, DecidableEq
 
+/-- 明細。`unit` は `Int`（返金・値引き訂正のため負を許す）、
+`qty` は `Nat`（個数なので 0 以上。0 の明細は 0 円として扱う）。 -/
 structure Line where
   unit : Int
   qty  : Nat
@@ -118,7 +120,8 @@ theorem subtotal_nonneg (ls : List Line) (h : ∀ l ∈ ls, 0 ≤ l.unit) :
 
 /-- **第2の山場**: 明細ごとの割引と合計への割引は一致しない。
 切り捨ての位置が違うので、割引があれば一般にはずれる。
-反例: gold・999 円 × 1 と 1 円 × 1。 -/
+反例: gold・999 円 × 1 と 1 円 × 1。
+（「常に違う」ではない。割り切れる明細では一致する。） -/
 theorem per_line_differs :
     totalPerLine .gold [⟨999, 1⟩, ⟨1, 1⟩] ≠ total .gold [⟨999, 1⟩, ⟨1, 1⟩] := by
   decide

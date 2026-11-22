@@ -4,3 +4,4 @@ REVIEW.md
 __pycache__/
 .pytest_cache/
 .hypothesis/
+.coverage

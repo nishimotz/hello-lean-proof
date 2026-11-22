@@ -59,6 +59,8 @@ inductive Rank where
   | normal | silver | gold
   deriving Repr, DecidableEq
 
+/-- 明細。`unit` は `Int`（返金・値引き訂正のため負を許す）、
+`qty` は `Nat`（個数なので 0 以上。0 の明細は 0 円として扱う）。 -/
 structure Line where
   unit : Int
   qty  : Nat
