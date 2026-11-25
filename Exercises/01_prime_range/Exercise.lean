@@ -30,7 +30,7 @@
 `n - 2` で `5` になる。だから `List.range (n - 2)` が正しい。
 
 **もし `List.range (n - 1)` と書いたら**、`[0..5]` に `+2` で `2..7` を調べる。
-**7 自身で割って余り 0** になるから、`isPrime 7` が `false` になる。実際に試すと落ちる。
+**7 自身で割って余り 0** になるから、`isPrime 7` が `false` になる。エラーにはならず、答えだけが間違う。
 -/
 
 /-! ## 正しい版
@@ -41,7 +41,7 @@ def isPrime (n : Nat) : Bool :=
 
 #eval isPrime 7      -- true
 #eval isPrime 8      -- false
-#eval isPrime 13     -- true  （00 の簡易版では判定できなかった）
+#eval isPrime 13     -- true  （00 の簡易版は 169 から壊れる）
 #eval isPrime 97     -- true
 #eval isPrime 1      -- false
 
@@ -88,7 +88,8 @@ example : 13 % 2 ≠ 0 ∧ 13 % 3 ≠ 0 ∧ 13 % 4 ≠ 0 ∧ 13 % 5 ≠ 0 ∧
 `List.range (n - 1)` にした版を書いて、`isPrimeBuggy 7` が `false` になることを確かめよ。
 **エラーではなく、間違った答えが正しく返る**。これが一番危ない種類のバグ。
 
-（`sorry` を消すと、望まない結果が出てエラーになる。それでよい。何が起きたか観察せよ）
+（98 行目の `#eval` は何も警告しない。もし `example : isPrimeBuggy 7 = true := by decide` と書けば、
+「`isPrimeBuggy 7 = true` は偽である」とエラーになる。この差を見よ）
 -/
 
 def isPrimeBuggy (n : Nat) : Bool :=
