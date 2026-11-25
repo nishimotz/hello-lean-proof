@@ -94,6 +94,14 @@ theorem my_thm (P : Prop) : P := by sorry
 `sorryAx` が出たら未証明。出なければ本物。
 （`example` は名前が無いので `#print axioms` で覗けない。**名前付きで書く**こと）
 
+ただし**「`sorryAx` が無ければ完全に無条件」ではない**。例えば `native_decide`（高速な `decide`）は「コンパイル済みコードを信頼する」という別の公理を使うので、`#print axioms` にそれが現れる。
+
+```
+'t_native' depends on axioms: [t_native._native.native_decide.ax_1_1]
+```
+
+`decide` や `rfl` は公理ゼロ。`native_decide` を使ったときは `#print axioms` の**出力全体**を読むこと。
+
 Python の `pass` と違って、Lean は「`pass` を使ったことを記録に残す」。だから後から検出できる。
 
 ---
@@ -116,15 +124,39 @@ example (P Q R : Prop) (h1 : P → Q) (h2 : Q → R) (hp : P) : R := by
 
 「命令を並べる」のではなく「**盤面を変えていく**」。ここが Python の関数と最も違う。
 
-### (b) 実行時エラーという概念が無い
+### (b) 純粋な関数には実行時エラーが無い（ただし `IO` は別）
 
-Python は「テストで見つける」。Lean は「型検査で通るか通らないか」。
-だから Lean のコードに `try/except` は無い。エラーは**コンパイル時に全部出る**か、**出ない**か。
+Python は「テストで見つける」。Lean の**純粋な関数**（`Nat → Nat` のような）は「型検査で通るか通らないか」。
+足りない場合分け（空リストの先頭など）は**コンパイル時に全部出る**か、**出ない**か。
 
-### (c) 証明は「実行」されない
+ただし **`IO` モナド（外部とやり取りするコード）には `try`/`catch`/`throw` がある**し、`Array.get!` のような「前提を満たす呼び出ししか許さない」関数は実行時にクラッシュし得る。
+
+```lean
+def safeDiv (a b : Nat) : IO Nat := do
+  try
+    if b == 0 then throw (IO.userError "div by zero") else return a / b
+  catch e =>
+    IO.println s!"caught: {e}"
+    return 0
+
+#eval safeDiv 10 0   -- caught: div by zero → 0
+```
+
+「Lean には実行時エラーが無い」は**純粋な関数について**の話。`IO` の世界には例外もクラッシュもある。
+
+### (c) 証明は「実行」されない（ただし検査には計算が要る）
 
 Python の関数は呼ぶと仕事をする。Lean の証明は**型検査を通ったら終わり**で、実行時に何もしない。
-だから「証明が速い/遅い」という話は基本無い（型検査の計算量は別）。
+
+ただし**「証明が速い/遅い」という話はある** — `decide` や `simp` は型検査の最中に実際に計算をする。例えば 2 万要素の合計を `decide` で確かめると、**検査だけで秒単位かかる**ことがある。
+
+```lean
+set_option maxRecDepth 1000000
+def bigSum : Nat := (List.range 20000).foldl (· + ·) 0
+theorem t_big : bigSum = 199990000 := by decide  -- 検査だけで 1.4 秒
+```
+
+「証明は実行されない」は正しいが、**「検査が重いと待たされる」** ことはある。
 
 ---
 
@@ -132,7 +164,7 @@ Python の関数は呼ぶと仕事をする。Lean の証明は**型検査を通
 
 | 誤解 | 実際 |
 |---|---|
-| 「証明は実行して確認する」 | 型検査が確認する。実行は無い |
+| 「証明は実行して確認する」 | 型検査が確認する。実行は無い（ただし検査の最中に計算は走る） |
 | 「`sorry` は `pass` みたいに一時的に置くだけ」 | 置けるが**記録が残る**。`sorryAx` で検出される |
 | 「tactic はライブラリ関数」 | tactic は**ゴールを変形する手**。戻り値が無い |
 | 「`exact` と `apply` は同じ」 | `exact` は埋める。`apply` は変換する。**別物** |
